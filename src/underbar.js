@@ -114,6 +114,7 @@
         accumulator = iterator(accumulator, item);
       }
     });
+
     return accumulator;
   };
 
@@ -138,9 +139,8 @@
     return _.reduce(collection, function(a, b) {
       if (!iterator(b)) {
         return false;
-      } else {
-        return a;
       }
+      return a;
     }, true);
   };
 
@@ -153,9 +153,8 @@
     return _.reduce(collection, function(a, b) {
       if (iterator(b)) {
         return true;
-      } else {
-        return a;
       }
+      return a;
     }, false);
   };
 
@@ -179,11 +178,27 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    _.each(arguments, function(innerObj) {
+      _.each(innerObj, function(prop, key) {
+        obj[key] = prop;
+      });
+    });
+
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    _.each(arguments, function(innerObj) {
+      _.each(innerObj, function(prop, key) {
+        if (obj[key] === undefined) {
+          obj[key] = prop;
+        }
+      });
+    });
+
+    return obj;
   };
 
 
